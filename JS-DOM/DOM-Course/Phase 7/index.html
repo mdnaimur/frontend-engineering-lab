@@ -1,0 +1,142 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale= 1.0" />
+    <title>DOM Course - Phase 4</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <form id="form" class="card">
+      <div class="progress">
+        <div class="progress-bar"></div>
+      </div>
+      <div class="step-count"></div>
+
+      <!-- Step 1 -->
+      <div data-step>
+        <h3>Email</h3>
+        <div class="field">
+          <input name="email" placeholder="Enter email" />
+          <div class="field-hint" data-hint="email"></div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div data-step>
+        <h3>Password</h3>
+        <div class="field">
+          <input type="password" name="password" placeholder="Enter password" />
+          <div class="field-hint" data-hint="password"></div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div data-step>
+        <h3>Review</h3>
+        <p>Click submit to finish</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="back" class="secondary">Back</button>
+        <button type="button" id="next">Next</button>
+        <button type="button" id="submit" hidden>Submit</button>
+      </div>
+    </form>
+
+    <!-- <div class="form">
+      <h2>Signup</h2>
+
+      <form id="signup">
+        <div class="field">
+          <label>Email</label>
+          <input type="text" name="email" />
+          <div class="field-hint" data-hint="email"></div>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" />
+          <div class="field-hint" data-hint="password"></div>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div> -->
+
+    <!-- <div class="card">
+      <h2>Signup Form</h2>
+
+      <form id="form">
+        <div class="field" id="emailField">
+          <label>Email</label>
+          <input type="text" id="email" />
+          <div class="error"></div>
+        </div>
+
+        <div class="field" id="passwordField">
+          <label>Password</label>
+          <input type="password" id="password" />
+          <div class="error"></div>
+        </div>
+
+        <div class="field" id="confirmField">
+          <label>Confirm Password</label>
+          <input type="password" id="confirm" />
+          <div class="error"></div>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <br />
+    <br />
+    <hr /> -->
+    <!-- 
+    <h2>Form Handling Demo</h2>
+
+    <form id="signup-form">
+      <label
+        >Email:
+        <input type="email" id="email" name="email" required />
+      </label>
+
+      <label
+        >Password:
+        <input type="password" id="password" name="password" required />
+      </label>
+
+      <label>
+        <input type="checkbox" name="newsletter" />
+        Subscribe to newsletter
+      </label>
+
+      <label>Interests:</label>
+      <label
+        ><input type="checkbox" name="interests" value="coding" /> Coding</label
+      >
+      <label
+        ><input type="checkbox" name="interests" value="music" /> Music</label
+      >
+
+      <label>Plan:</label>
+      <label
+        ><input type="radio" name="plan" value="free" checked /> Free</label
+      >
+      <label><input type="radio" name="plan" value="pro" /> Pro</label>
+
+      <label>
+        <input type="checkbox" name="terms" />
+        Accept Terms
+      </label>
+
+      <button type="submit">Submit</button>
+    </form> -->
+
+    <!-- <h3>Output:</h3>
+    <pre id="output"></pre> -->
+  </body>
+  <script src="./index.js"></script>
+</html>
