@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SELECTING ELEMENTS
     // ---------------------------
     const title = document.getElementById('title');
-    console.log("By ID:", title);
+    console.log("By ID:\n", title);
 
     const btn = document.querySelector('.submit-btn');
     console.log("Query Selector (btn):", btn);
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("All inputs:", allInputs);
 
     // Loop NodeList
+    console.log("Card item count........................\n")
     allCards.forEach((card, index) => {
         console.log(`Card ${index}:`, card.textContent);
     });
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------------------------
     const box = document.querySelector('.box');
 
-    box.style.backgroundColor = '#2563eb';
+    box.style.backgroundColor = '#b37211';
     box.style.padding = '1rem';
 
     console.log("Box styled");
@@ -329,7 +330,7 @@ input.addEventListener('blur', () => {
 // -----------------------------
 // BUTTON EVENTS
 // -----------------------------
-const btn = document.querySelector('.submit-btn');
+// const btn = document.querySelector('.submit-btn');
 
 function handler(e) {
     console.log("Button event:", e.type);

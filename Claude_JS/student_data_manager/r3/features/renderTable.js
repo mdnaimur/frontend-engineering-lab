@@ -1,5 +1,13 @@
 import { getFilteredStudents } from '../utils/getFilteredStudents.js';
 
+import { getCurrentPage } from '../state/satate.js';
+import { getGrade } from '../utils/getGrade.js';
+import { renderPagination } from './renderPagination.js';
+
+
+
+const rowsPerPage = 5;
+
 export function renderTable() {
 
     const tbody = document.getElementById("tableBody");
@@ -9,8 +17,10 @@ export function renderTable() {
     // ✅ STEP 1: calculate total pages FIRST
     const totalPages = Math.ceil(filtered_data.length / rowsPerPage);
     // ✅ STEP 2: FIX invalid page (VERY IMPORTANT)
+    const currentPage = getCurrentPage();
     if (currentPage > totalPages) {
-        currentPage = totalPages || 1;
+        // currentPage = totalPages || 1;
+        setCurrentPage(totalPages || 1);
     }
 
     const start = (currentPage - 1) * rowsPerPage;
