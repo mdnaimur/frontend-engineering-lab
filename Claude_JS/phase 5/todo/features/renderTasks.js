@@ -1,5 +1,5 @@
+import { escapeHtml } from '../component/escapeHTML.js';
 import { getFilteredTasks } from '../services/getFilteredTasks.js';
-
 export function renderTasks() {
     const filterTasks = getFilteredTasks();
     const list = document.getElementById('todoList');
