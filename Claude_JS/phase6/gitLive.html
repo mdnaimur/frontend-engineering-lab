@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GitHub Profile Viewer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .app {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            color: #f0f6fc;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #c9d1d9;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-row input:focus {
+            border-color: #388bfd;
+        }
+
+        .search-row button {
+            padding: 12px 20px;
+            background: #238636;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .search-row button:hover {
+            background: #2ea043;
+        }
+
+        .search-row button:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .card.visible {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid #30363d;
+        }
+
+        .profile-info h2 {
+            font-size: 1.2rem;
+            color: #f0f6fc;
+            margin-bottom: 2px;
+        }
+
+        .profile-info .login {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .bio {
+            font-size: 14px;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 1rem 0;
+        }
+
+        .stat {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #8b949e;
+            margin-top: 2px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 1rem;
+        }
+
+        .meta span::before {
+            margin-right: 4px;
+        }
+
+        .repos-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #c9d1d9;
+        }
+
+        .repo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .repo {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .repo a {
+            color: #388bfd;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .repo a:hover {
+            text-decoration: underline;
+        }
+
+        .repo-desc {
+            font-size: 13px;
+            color: #8b949e;
+            margin-top: 4px;
+        }
+
+        .repo-meta {
+            font-size: 12px;
+            color: #8b949e;
+            margin-top: 6px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .skeleton {
+            background: #21262d;
+            border-radius: 6px;
+            animation: pulse 1.4s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .sk-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+        }
+
+        .sk-line {
+            height: 14px;
+            margin-bottom: 8px;
+        }
+
+        #error {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #f85149;
+            background: #161b22;
+            border: 1px solid #f8514940;
+            border-radius: 12px;
+        }
+
+        #error.visible {
+            display: block;
+        }
+
+        #loading {
+            display: none;
+        }
+
+        #loading.visible {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>GitHub Profile Viewer</h1>
+
+        <div class="search-row">
+            <input type="text" id="usernameInput" placeholder="Enter GitHub username..." />
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div id="loading">
+            <div class="card visible">
+                <div class="profile-header">
+                    <div class="skeleton sk-avatar"></div>
+                    <div style="flex:1">
+                        <div class="skeleton sk-line" style="width:60%"></div>
+                        <div class="skeleton sk-line" style="width:40%"></div>
+                        <div class="skeleton sk-line" style="width:80%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="error"></div>
+
+        <!-- Profile card -->
+        <div class="card" id="profileCard">
+            <div class="profile-header">
+                <img class="avatar" id="avatar" src="" alt="avatar" />
+                <div class="profile-info">
+                    <h2 id="fullName"></h2>
+                    <div class="login" id="loginName"></div>
+                    <div class="bio" id="bio"></div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="reposCount">0</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="followersCount">0</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="followingCount">0</div>
+                    <div class="stat-label">Following</div>
+                </div>
+            </div>
+
+            <div class="meta">
+                <span id="location"></span>
+                <span id="company"></span>
+                <span id="blog"></span>
+                <span id="joined"></span>
+            </div>
+
+            <div class="repos-title">Top Repositories</div>
+            <div class="repo-list" id="repoList"></div>
+        </div>
+    </div>
+
+    <script>
+        // STATE
+        let isLoading = false;
+
+        // UI helpers
+        function showLoading() {
+            isLoading = true;
+            document.getElementById('loading').classList.add('visible');
+            document.getElementById('profileCard').classList.remove('visible');
+            document.getElementById('error').classList.remove('visible');
+            document.getElementById('searchBtn').disabled = true;
+        }
+
+        function hideLoading() {
+            isLoading = false;
+            document.getElementById('loading').classList.remove('visible');
+            document.getElementById('searchBtn').disabled = false;
+        }
+
+        function showError(message) {
+            const el = document.getElementById('error');
+            el.textContent = message;
+            el.classList.add('visible');
+        }
+
+        // DATA FETCHING — two parallel requests
+        async function fetchGitHubData(username) {
+            const [profileRes, reposRes] = await Promise.all([
+                fetch(`https://api.github.com/users/${username}`),
+                fetch(`https://api.github.com/users/${username}/repos?sort=stars&per_page=5`)
+            ]);
+
+            // GitHub returns 404 for unknown users
+            if (profileRes.status === 404) throw new Error(`User "${username}" not found.`);
+            if (!profileRes.ok) throw new Error(`GitHub API error: ${profileRes.status}`);
+
+            const profile = await profileRes.json();
+            const repos = await reposRes.json();
+            return { profile, repos };
+        }
+
+        // RENDER — populate DOM from data
+        function renderProfile(profile, repos) {
+            // Profile header
+            document.getElementById('avatar').src = profile.avatar_url;
+            document.getElementById('fullName').textContent = profile.name || profile.login;
+            document.getElementById('loginName').textContent = `@${profile.login}`;
+            document.getElementById('bio').textContent = profile.bio || '';
+
+            // Stats
+            document.getElementById('reposCount').textContent = profile.public_repos.toLocaleString();
+            document.getElementById('followersCount').textContent = profile.followers.toLocaleString();
+            document.getElementById('followingCount').textContent = profile.following.toLocaleString();
+
+            // Meta
+            const joined = new Date(profile.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+            document.getElementById('location').textContent = profile.location ? `📍 ${profile.location}` : '';
+            document.getElementById('company').textContent = profile.company ? `🏢 ${profile.company}` : '';
+            document.getElementById('joined').textContent = `📅 Joined ${joined}`;
+            const blogEl = document.getElementById('blog');
+            blogEl.innerHTML = profile.blog
+                ? `🔗 <a href="${profile.blog}" target="_blank" style="color:#388bfd">${profile.blog}</a>`
+                : '';
+
+            // Repos
+            document.getElementById('repoList').innerHTML = repos.map(repo => `
+      <div class="repo">
+        <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+        <div class="repo-desc">${repo.description || 'No description'}</div>
+        <div class="repo-meta">
+          <span>⭐ ${repo.stargazers_count.toLocaleString()}</span>
+          <span>🍴 ${repo.forks_count.toLocaleString()}</span>
+          ${repo.language ? `<span>● ${repo.language}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+            document.getElementById('profileCard').classList.add('visible');
+        }
+
+        // MAIN HANDLER
+        async function searchUser() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username || isLoading) return;
+
+            showLoading();
+
+            try {
+                const { profile, repos } = await fetchGitHubData(username);
+                renderProfile(profile, repos);
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                hideLoading(); // always runs — even if there was an error
+            }
+        }
+
+        // Events
+        document.getElementById('searchBtn').addEventListener('click', searchUser);
+        document.getElementById('usernameInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') searchUser();
+        });
+
+        // Load a default profile on startup
+        document.getElementById('usernameInput').value = 'mdnaimur';
+        searchUser();
+    </script>
+</body>
+
+</html>

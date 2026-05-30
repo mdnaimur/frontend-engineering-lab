@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Style API Client Demo</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Production Style API Client</h1>
+            <p>
+                This demo shows a clean frontend architecture using:
+            </p>
+
+            <div class="grid">
+                <div class="post">
+                    <h3>API Client Layer</h3>
+                    <p>Centralized fetch handling with retries and errors.</p>
+                </div>
+
+                <div class="post">
+                    <h3>Service Layer</h3>
+                    <p>Reusable business API methods.</p>
+                </div>
+
+                <div class="post">
+                    <h3>Dashboard Layer</h3>
+                    <p>Pure UI orchestration and rendering.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <button id="loadBtn">Load Dashboard</button>
+                <button id="createBtn">Create Post</button>
+            </div>
+
+            <div id="status"></div>
+        </div>
+
+        <div class="card">
+            <h2>User Dashboard</h2>
+            <div id="dashboard"></div>
+        </div>
+
+        <div class="card">
+            <h2>Console Logs</h2>
+            <pre id="logs"></pre>
+        </div>
+    </div>
+
+    <script src="./main.js" type="module" defer></script>
+</body>
+
+</html>
