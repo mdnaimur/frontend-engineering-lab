@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Markdown Editor</title>
+    <!-- marked.js — lightweight markdown parser, no build step needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #1e1e2e;
+            color: #cdd6f4
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: #181825;
+            border-right: 1px solid #313244;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0
+        }
+
+        .sidebar-header {
+            padding: 14px 12px 10px;
+            border-bottom: 1px solid #313244;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .sidebar-header h2 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6c7086
+        }
+
+        .note-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px
+        }
+
+        .note-item {
+            padding: 9px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-bottom: 2px;
+            border: 1px solid transparent
+        }
+
+        .note-item:hover {
+            background: #313244
+        }
+
+        .note-item.active {
+            background: #313244;
+            border-color: #6c7086
+        }
+
+        .note-item-title {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .note-item-date {
+            font-size: 11px;
+            color: #6c7086;
+            margin-top: 2px
+        }
+
+        .sidebar-footer {
+            padding: 10px 12px;
+            border-top: 1px solid #313244
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0
+        }
+
+        .toolbar {
+            background: #181825;
+            border-bottom: 1px solid #313244;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        .tool-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: none;
+            background: none;
+            color: #cdd6f4;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: monospace
+        }
+
+        .tool-btn:hover {
+            background: #313244
+        }
+
+        .toolbar-sep {
+            width: 1px;
+            height: 18px;
+            background: #313244;
+            margin: 0 2px
+        }
+
+        .word-count {
+            font-size: 12px;
+            color: #6c7086;
+            margin-left: auto
+        }
+
+        .shortcut-hint {
+            font-size: 11px;
+            color: #6c7086
+        }
+
+        /* Editor/Preview pane */
+        .panes {
+            flex: 1;
+            display: flex;
+            min-height: 0
+        }
+
+        .editor-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #313244;
+            min-width: 0
+        }
+
+        .pane-label {
+            font-size: 11px;
+            color: #6c7086;
+            padding: 5px 14px;
+            background: #181825;
+            border-bottom: 1px solid #313244;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .editor {
+            flex: 1;
+            padding: 20px;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            overflow-y: auto
+        }
+
+        .preview-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0
+        }
+
+        .preview {
+            flex: 1;
+            padding: 20px 28px;
+            overflow-y: auto;
+            background: #1e1e2e;
+            line-height: 1.8;
+            font-size: 15px
+        }
+
+        /* Markdown styles in preview */
+        .preview h1,
+        .preview h2,
+        .preview h3 {
+            color: #cba6f7;
+            margin: 1.2em 0 .4em;
+            line-height: 1.3
+        }
+
+        .preview h1 {
+            font-size: 1.6rem;
+            border-bottom: 1px solid #313244;
+            padding-bottom: .3em
+        }
+
+        .preview h2 {
+            font-size: 1.3rem
+        }
+
+        .preview p {
+            margin: .6em 0;
+            color: #cdd6f4
+        }
+
+        .preview a {
+            color: #89b4fa;
+            text-underline-offset: 3px
+        }
+
+        .preview code {
+            background: #313244;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #a6e3a1
+        }
+
+        .preview pre {
+            background: #181825;
+            border: 1px solid #313244;
+            border-radius: 8px;
+            padding: 14px;
+            overflow-x: auto;
+            margin: 1em 0
+        }
+
+        .preview pre code {
+            background: none;
+            padding: 0;
+            font-size: 13px
+        }
+
+        .preview blockquote {
+            border-left: 3px solid #6c7086;
+            margin: 1em 0;
+            padding: .4em 1em;
+            color: #9399b2;
+            background: #181825;
+            border-radius: 0 6px 6px 0
+        }
+
+        .preview ul,
+        .preview ol {
+            padding-left: 1.4em;
+            margin: .6em 0
+        }
+
+        .preview li {
+            margin: .25em 0
+        }
+
+        .preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 14px
+        }
+
+        .preview th {
+            background: #313244;
+            padding: 8px 12px;
+            text-align: left;
+            color: #cba6f7
+        }
+
+        .preview td {
+            padding: 7px 12px;
+            border-bottom: 1px solid #313244
+        }
+
+        .preview hr {
+            border: none;
+            border-top: 1px solid #313244;
+            margin: 1.5em 0
+        }
+
+        .preview strong {
+            color: #f38ba8
+        }
+
+        .preview em {
+            color: #fab387
+        }
+
+        .preview img {
+            max-width: 100%;
+            border-radius: 6px
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 6px 12px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500
+        }
+
+        .btn-sm-purple {
+            background: #6c3483;
+            color: #fff
+        }
+
+        .btn-sm-purple:hover {
+            background: #7d3c98
+        }
+
+        .btn-red {
+            background: none;
+            border: none;
+            color: #f38ba8;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 6px
+        }
+
+        .btn-red:hover {
+            color: #f05a7e
+        }
+
+        /* Saved toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #a6e3a1;
+            color: #1e1e2e;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity .2s;
+            pointer-events: none
+        }
+
+        .toast.show {
+            opacity: 1
+        }
+
+        .layout {
+            display: flex;
+            flex: 1;
+            min-height: 0
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Notes</h2>
+                <button class="btn btn-sm-purple" onclick="newNote()">+ New</button>
+            </div>
+            <div class="note-list" id="noteList"></div>
+            <div class="sidebar-footer">
+                <button class="btn" style="width:100%;background:#313244;color:#cdd6f4" onclick="exportNote()">⬇ Export
+                    .md</button>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div class="main">
+            <div class="toolbar">
+                <button class="tool-btn" onclick="insertMd('**','**')" title="Bold (Ctrl+B)"><b>B</b></button>
+                <button class="tool-btn" onclick="insertMd('*','*')" title="Italic (Ctrl+I)"><i>I</i></button>
+                <button class="tool-btn" onclick="insertMd('`','`')" title="Code">&lt;/&gt;</button>
+                <button class="tool-btn" onclick="insertMd('\n```\n','\n```')" title="Code block">```</button>
+                <div class="toolbar-sep"></div>
+                <button class="tool-btn" onclick="insertMdLine('# ')" title="H1">H1</button>
+                <button class="tool-btn" onclick="insertMdLine('## ')" title="H2">H2</button>
+                <button class="tool-btn" onclick="insertMdLine('### ')" title="H3">H3</button>
+                <div class="toolbar-sep"></div>
+                <button class="tool-btn" onclick="insertMdLine('- ')" title="List item">• List</button>
+                <button class="tool-btn" onclick="insertMdLine('> ')" title="Blockquote">" Quote</button>
+                <button class="tool-btn" onclick="insertMdLine('---')" title="Divider">—</button>
+                <div class="toolbar-sep"></div>
+                <span class="shortcut-hint">Ctrl+S save · Ctrl+B bold · Ctrl+I italic</span>
+                <span class="word-count" id="wordCount">0 words</span>
+            </div>
+
+            <div class="panes">
+                <div class="editor-pane">
+                    <div class="pane-label">Markdown</div>
+                    <textarea class="editor" id="editor"
+                        placeholder="Start writing in Markdown...&#10;&#10;# Hello World&#10;**bold**, *italic*, `code`&#10;&#10;- list item&#10;- another item"></textarea>
+                </div>
+                <div class="preview-pane">
+                    <div class="pane-label">Preview</div>
+                    <div class="preview" id="preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Saved ✓</div>
+
+    <script>
+        // ── STORAGE ───────────────────────────────────────────
+        const store = {
+            get: (k, fb = null) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } },
+            set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
+        };
+
+        // ── STATE ─────────────────────────────────────────────
+        let notes = store.get('md-notes', []);
+        let activeId = store.get('md-active', null);
+
+        // ── LOGIC ─────────────────────────────────────────────
+        function createNote(title = 'Untitled') {
+            return {
+                id: Date.now(),
+                title,
+                content: `# ${title}\n\nStart writing here...`,
+                updatedAt: new Date().toISOString()
+            };
+        }
+
+        function getActive() {
+            return notes.find(n => n.id === activeId) ?? null;
+        }
+
+        function saveActive() {
+            const content = document.getElementById('editor').value;
+            const note = getActive();
+            if (!note) return;
+
+            // Derive title from first heading or first line
+            const firstLine = content.split('\n').find(l => l.trim()) ?? 'Untitled';
+            const title = firstLine.replace(/^#+\s*/, '').trim() || 'Untitled';
+
+            notes = notes.map(n =>
+                n.id === activeId
+                    ? { ...n, content, title, updatedAt: new Date().toISOString() }
+                    : n
+            );
+            store.set('md-notes', notes);
+            renderSidebar();
+            showToast();
+        }
+
+        // ── UI ────────────────────────────────────────────────
+        function render() {
+            renderSidebar();
+            loadNoteIntoEditor();
+        }
+
+        function renderSidebar() {
+            const list = document.getElementById('noteList');
+            if (notes.length === 0) {
+                list.innerHTML = `<div style="padding:12px;font-size:12px;color:#6c7086;text-align:center">No notes yet</div>`;
+                return;
+            }
+            list.innerHTML = [...notes]
+                .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+                .map(note => `
+      <div class="note-item ${note.id === activeId ? 'active' : ''}" onclick="selectNote(${note.id})">
+        <div class="note-item-title">${escHtml(note.title)}</div>
+        <div class="note-item-date" style="display:flex;justify-content:space-between">
+          <span>${timeAgo(note.updatedAt)}</span>
+          <button class="btn-red" onclick="event.stopPropagation();deleteNote(${note.id})">✕</button>
+        </div>
+      </div>
+    `).join('');
+        }
+
+        function loadNoteIntoEditor() {
+            const note = getActive();
+            const editor = document.getElementById('editor');
+            const preview = document.getElementById('preview');
+
+            if (!note) {
+                editor.value = '';
+                preview.innerHTML = '<p style="color:#6c7086;font-style:italic">Select or create a note.</p>';
+                return;
+            }
+
+            editor.value = note.content;
+            updatePreview(note.content);
+            updateWordCount(note.content);
+        }
+
+        function updatePreview(md) {
+            document.getElementById('preview').innerHTML = marked.parse(md);
+        }
+
+        function updateWordCount(text) {
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const chars = text.length;
+            document.getElementById('wordCount').textContent = `${words} words · ${chars} chars`;
+        }
+
+        // ── ACTIONS ───────────────────────────────────────────
+        function newNote() {
+            const note = createNote('New Note');
+            notes.unshift(note);
+            activeId = note.id;
+            store.set('md-active', activeId);
+            store.set('md-notes', notes);
+            render();
+            document.getElementById('editor').focus();
+        }
+
+        function selectNote(id) {
+            if (activeId !== null) saveActive(); // save before switching
+            activeId = id;
+            store.set('md-active', activeId);
+            loadNoteIntoEditor();
+            renderSidebar();
+        }
+
+        function deleteNote(id) {
+            if (!confirm('Delete this note?')) return;
+            notes = notes.filter(n => n.id !== id);
+            activeId = notes[0]?.id ?? null;
+            store.set('md-notes', notes);
+            store.set('md-active', activeId);
+            render();
+        }
+
+        function exportNote() {
+            const note = getActive();
+            if (!note) return;
+            const blob = new Blob([note.content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = Object.assign(document.createElement('a'), {
+                href: url,
+                download: `${note.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.md`
+            });
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ── EDITOR HELPERS ────────────────────────────────────
+        function insertMd(before, after) {
+            const el = document.getElementById('editor');
+            const start = el.selectionStart;
+            const end = el.selectionEnd;
+            const sel = el.value.slice(start, end);
+            const insert = `${before}${sel}${after}`;
+            el.value = el.value.slice(0, start) + insert + el.value.slice(end);
+            el.selectionStart = start + before.length;
+            el.selectionEnd = start + before.length + sel.length;
+            el.focus();
+            el.dispatchEvent(new Event('input'));
+        }
+
+        function insertMdLine(prefix) {
+            const el = document.getElementById('editor');
+            const start = el.selectionStart;
+            const lineStart = el.value.lastIndexOf('\n', start - 1) + 1;
+            el.value = el.value.slice(0, lineStart) + prefix + el.value.slice(lineStart);
+            el.selectionStart = el.selectionEnd = lineStart + prefix.length;
+            el.focus();
+            el.dispatchEvent(new Event('input'));
+        }
+
+        // ── EVENTS ────────────────────────────────────────────
+        const editor = document.getElementById('editor');
+        let saveTimer;
+
+        editor.addEventListener('input', () => {
+            const content = editor.value;
+            updatePreview(content);
+            updateWordCount(content);
+            // Autosave with debounce
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(saveActive, 1000);
+        });
+
+        // Keyboard shortcuts
+        editor.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 's') { e.preventDefault(); saveActive(); }
+                if (e.key === 'b') { e.preventDefault(); insertMd('**', '**'); }
+                if (e.key === 'i') { e.preventDefault(); insertMd('*', '*'); }
+            }
+            // Tab key inserts spaces instead of losing focus
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const s = editor.selectionStart;
+                editor.value = editor.value.slice(0, s) + '  ' + editor.value.slice(s);
+                editor.selectionStart = editor.selectionEnd = s + 2;
+            }
+        });
+
+        // ── HELPERS ───────────────────────────────────────────
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 1800);
+        }
+
+        function timeAgo(iso) {
+            const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+            if (s < 60) return 'just now';
+            if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+            if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+            return `${Math.floor(s / 86400)}d ago`;
+        }
+
+        function escHtml(str = '') {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ── INIT ─────────────────────────────────────────────
+        if (notes.length === 0) {
+            // Seed with a welcome note
+            const welcome = createNote('Welcome');
+            welcome.content = `# Welcome to Markdown Editor\n\nThis is a **live preview** markdown editor.\n\n## Features\n\n- ✅ Live preview as you type\n- ✅ Auto-saves every second\n- ✅ Multiple notes with sidebar\n- ✅ Keyboard shortcuts (Ctrl+B, Ctrl+I, Ctrl+S)\n- ✅ Export to .md file\n- ✅ Persists across browser sessions\n\n## Markdown Cheatsheet\n\n| Syntax | Result |\n|--------|--------|\n| \`**bold**\` | **bold** |\n| \`*italic*\` | *italic* |\n| \`# Heading\` | Heading |\n| \`\`\`code\`\`\` | \`code\` |\n\n> Start writing your own notes!\n`;
+            notes.push(welcome);
+            activeId = welcome.id;
+            store.set('md-notes', notes);
+            store.set('md-active', activeId);
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

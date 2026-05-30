@@ -10,6 +10,9 @@
 7. revision deshboard phase 4 feature -->
 
 
-1. todo apps bug fix and revison
+<!-- 1. todo apps bug fix and revison
 2. do your self todo app build and time limied 1hr20min
-3. phase 6 play with every single promise, fetch then all make example and play
+3. phase 6 play with every single promise, fetch then all make example and play -->
+
+1. Notes projects Phase 8
+2. 
