@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dev Job Board</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh
+        }
+
+        .header {
+            background: #1e293b;
+            color: #fff;
+            padding: 20px 24px
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 2px
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #94a3b8
+        }
+
+        .app {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 24px 16px
+        }
+
+        .filters {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-end
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 160px
+        }
+
+        .filter-field label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .filter-field input,
+        .filter-field select {
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none
+        }
+
+        .filter-field input:focus,
+        .filter-field select:focus {
+            border-color: #6366f1
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: #fff
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db
+        }
+
+        .btn-outline:hover {
+            background: #f9fafb
+        }
+
+        .results-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #64748b
+        }
+
+        .job-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        /* Job card */
+        .job-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 14px;
+            cursor: pointer;
+            transition: border-color .15s, box-shadow .15s
+        }
+
+        .job-card:hover {
+            border-color: #a5b4fc;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, .08)
+        }
+
+        .job-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            object-fit: contain;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px
+        }
+
+        .job-logo img {
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            object-fit: contain
+        }
+
+        .job-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .job-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 3px
+        }
+
+        .job-company {
+            font-size: 13px;
+            color: #6366f1;
+            font-weight: 500
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 6px
+        }
+
+        .badge {
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500
+        }
+
+        .badge-blue {
+            background: #eff6ff;
+            color: #1d4ed8
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: #15803d
+        }
+
+        .badge-gray {
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0
+        }
+
+        .job-salary {
+            font-size: 13px;
+            color: #10b981;
+            font-weight: 500;
+            white-space: nowrap
+        }
+
+        .job-posted {
+            font-size: 12px;
+            color: #94a3b8
+        }
+
+        /* Skeleton */
+        .skeleton {
+            background: #e2e8f0;
+            border-radius: 6px;
+            animation: pulse 1.4s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        .sk-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 14px;
+            margin-bottom: 10px
+        }
+
+        .sk-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            flex-shrink: 0
+        }
+
+        .sk-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        /* Detail panel */
+        .detail-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            z-index: 100;
+            display: none;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 12px
+        }
+
+        .detail-backdrop.open {
+            display: flex
+        }
+
+        .detail-panel {
+            background: #fff;
+            width: 100%;
+            max-width: 520px;
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .detail-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px
+        }
+
+        .detail-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151
+        }
+
+        .detail-body h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 16px 0 6px;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .detail-footer {
+            padding: 14px 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+            margin-left: auto;
+            line-height: 1
+        }
+
+        .close-btn:hover {
+            color: #374151
+        }
+
+        .empty {
+            text-align: center;
+            padding: 3rem 0;
+            color: #94a3b8;
+            font-size: 14px
+        }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #dc2626;
+            font-size: 14px
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>👨‍💻 Dev Job Board</h1>
+        <p>Live remote developer jobs — updated in real time</p>
+    </div>
+
+    <div class="app">
+        <div class="filters">
+            <div class="filter-field">
+                <label>Search</label>
+                <input type="text" id="searchQ" placeholder="React, Python, DevOps..." />
+            </div>
+            <div class="filter-field">
+                <label>Category</label>
+                <select id="catFilter">
+                    <option value="software-dev">Software Development</option>
+                    <option value="devops">DevOps / SysAdmin</option>
+                    <option value="design">Design</option>
+                    <option value="data">Data Science</option>
+                    <option value="qa">QA & Testing</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="loadJobs()">Search</button>
+            <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
+        </div>
+
+        <div class="results-bar">
+            <span id="resultsLabel">Loading jobs...</span>
+            <span id="lastUpdated" style="font-size:12px"></span>
+        </div>
+
+        <div id="jobList" class="job-list"></div>
+    </div>
+
+    <!-- Detail panel -->
+    <div class="detail-backdrop" id="detailBackdrop">
+        <div class="detail-panel">
+            <div class="detail-header">
+                <div id="detailLogo" class="job-logo"></div>
+                <div style="flex:1;min-width:0">
+                    <div id="detailTitle" style="font-size:16px;font-weight:700"></div>
+                    <div id="detailCompany" style="font-size:13px;color:#6366f1;margin-top:2px"></div>
+                    <div id="detailMeta" class="job-meta" style="margin-top:6px"></div>
+                </div>
+                <button class="close-btn" onclick="closeDetail()">×</button>
+            </div>
+            <div class="detail-body" id="detailBody"></div>
+            <div class="detail-footer">
+                <a id="applyBtn" href="#" target="_blank" class="btn btn-primary" style="text-decoration:none">Apply Now
+                    →</a>
+                <button class="btn btn-outline" onclick="closeDetail()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── STATE ─────────────────────────────────────────────
+        let allJobs = [];
+        let displayJobs = [];
+        let isLoading = false;
+
+        // ── FETCH ─────────────────────────────────────────────
+        async function loadJobs() {
+            if (isLoading) return;
+            isLoading = true;
+
+            const query = document.getElementById('searchQ').value.trim();
+            const cat = document.getElementById('catFilter').value;
+
+            showSkeletons(6);
+            document.getElementById('resultsLabel').textContent = 'Fetching jobs...';
+
+            try {
+                // remotive.io — free, no API key needed, real job data
+                const params = new URLSearchParams({ category: cat });
+                if (query) params.append('search', query);
+
+                const res = await fetch(`https://remotive.com/api/remote-jobs?${params}`);
+                if (!res.ok) throw new Error(`API error ${res.status}`);
+
+                const data = await res.json();
+                allJobs = data.jobs ?? [];
+                displayJobs = allJobs;
+
+                document.getElementById('lastUpdated').textContent =
+                    `Updated ${new Date().toLocaleTimeString()}`;
+
+                renderJobs(displayJobs);
+            } catch (err) {
+                document.getElementById('jobList').innerHTML = `
+      <div class="error-box">
+        ⚠️ ${err.message}<br>
+        <small style="color:#9ca3af">Check your connection or try again.</small><br><br>
+        <button class="btn btn-outline" onclick="loadJobs()">Retry</button>
+      </div>`;
+                document.getElementById('resultsLabel').textContent = 'Failed to load';
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // ── RENDER ────────────────────────────────────────────
+        function renderJobs(jobs) {
+            document.getElementById('resultsLabel').textContent =
+                `${jobs.length} job${jobs.length !== 1 ? 's' : ''} found`;
+
+            if (jobs.length === 0) {
+                document.getElementById('jobList').innerHTML =
+                    `<div class="empty">No jobs match your search.<br>Try different keywords.</div>`;
+                return;
+            }
+
+            document.getElementById('jobList').innerHTML = jobs.map((job, i) => `
+    <div class="job-card" onclick="openDetail(${i})">
+      <div class="job-logo">
+        ${job.company_logo
+                    ? `<img src="${job.company_logo}" alt="${escHtml(job.company_name)}" onerror="this.parentNode.textContent='💼'" />`
+                    : '💼'}
+      </div>
+      <div class="job-info">
+        <div class="job-title">${escHtml(job.title)}</div>
+        <div class="job-company">${escHtml(job.company_name)}</div>
+        <div class="job-meta">
+          <span class="badge badge-blue">${escHtml(job.job_type ?? 'Remote')}</span>
+          <span class="badge badge-gray">📍 ${escHtml(job.candidate_required_location || 'Worldwide')}</span>
+          ${job.salary ? `<span class="job-salary">${escHtml(job.salary)}</span>` : ''}
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="job-posted">${timeAgo(job.publication_date)}</div>
+        <span class="badge badge-green" style="margin-top:6px;display:inline-block">${escHtml(job.category ?? '')}</span>
+      </div>
+    </div>
+  `).join('');
+        }
+
+        function showSkeletons(n) {
+            document.getElementById('jobList').innerHTML = Array.from({ length: n }, () => `
+    <div class="sk-card">
+      <div class="skeleton sk-logo"></div>
+      <div class="sk-body">
+        <div class="skeleton" style="height:16px;width:60%"></div>
+        <div class="skeleton" style="height:13px;width:35%"></div>
+        <div class="skeleton" style="height:11px;width:50%"></div>
+      </div>
+    </div>
+  `).join('');
+        }
+
+        // ── DETAIL PANEL ──────────────────────────────────────
+        function openDetail(index) {
+            const job = displayJobs[index];
+            if (!job) return;
+
+            document.getElementById('detailLogo').innerHTML = job.company_logo
+                ? `<img src="${job.company_logo}" alt="" onerror="this.parentNode.textContent='💼'" />`
+                : '💼';
+
+            document.getElementById('detailTitle').textContent = job.title;
+            document.getElementById('detailCompany').textContent = job.company_name;
+            document.getElementById('detailMeta').innerHTML = `
+    <span class="badge badge-blue">${job.job_type ?? 'Remote'}</span>
+    <span class="badge badge-gray">📍 ${job.candidate_required_location || 'Worldwide'}</span>
+    ${job.salary ? `<span class="job-salary">${escHtml(job.salary)}</span>` : ''}
+  `;
+
+            // Sanitize and display job description HTML
+            const desc = document.getElementById('detailBody');
+            desc.innerHTML = '';
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = job.description ?? 'No description provided.';
+            // Strip script tags for safety
+            wrapper.querySelectorAll('script,style').forEach(el => el.remove());
+            desc.appendChild(wrapper);
+
+            document.getElementById('applyBtn').href = job.url ?? '#';
+            document.getElementById('detailBackdrop').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detailBackdrop').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('detailBackdrop').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeDetail();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
+
+        // ── HELPERS ───────────────────────────────────────────
+        function resetFilters() {
+            document.getElementById('searchQ').value = '';
+            document.getElementById('catFilter').value = 'software-dev';
+            loadJobs();
+        }
+
+        function timeAgo(dateStr) {
+            const diff = Date.now() - new Date(dateStr);
+            const days = Math.floor(diff / 86400000);
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days}d ago`;
+            if (days < 30) return `${Math.floor(days / 7)}w ago`;
+            return `${Math.floor(days / 30)}mo ago`;
+        }
+
+        function escHtml(str = '') {
+            const d = document.createElement('div');
+            d.textContent = String(str);
+            return d.innerHTML;
+        }
+
+        loadJobs();
+    </script>
+</body>
+
+</html>
