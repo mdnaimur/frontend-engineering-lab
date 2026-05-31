@@ -4,7 +4,7 @@ const MAX_ATTEMPTS = 7;
 let secret, attempts = 0, guesses = [], gameOver = false;
 
 const resetGame_btn = document.querySelector('.reset-btn');
-console.log(resetGame_btn);
+
 if (resetGame_btn) {
 
     resetGame_btn.addEventListener("click", resetGame)
@@ -13,7 +13,7 @@ if (resetGame_btn) {
 
 function resetGame() {
     secret = Math.floor(Math.random() * 100) + 1;
-    console.log("NEW SECRET:", secret);
+
 
     attempts = 0;
     guesses = [];
@@ -44,23 +44,21 @@ function resetGame() {
 
 }
 const makeGuess_btn = document.getElementById("makeGuess");
-console.log(makeGuess_btn);//makeGuess
+
 
 if (makeGuess_btn) {
-    console.log("iam makegues button click");
 
     makeGuess_btn.addEventListener("click", makeGuess);
 }
 
-
 function makeGuess() {
-    console.log("Current secret[make guess fn]:", secret);
+
 
     if (gameOver) return;
 
     const input = document.getElementById("guess-input");
     const guess = Number(input.value);
-    console.log(guess);
+
 
     if (isNaN(guess) || guess < 1 || guess > 100) {
         const feedback = document.getElementById("feedback");
@@ -70,9 +68,9 @@ function makeGuess() {
         return;
     }
     attempts++;
-    console.log("before push", guesses);
+
     guesses.push(guess);
-    console.log("after push", guesses);
+
 
 
     const dot = document.getElementById("dot-" + (attempts - 1));
@@ -84,11 +82,6 @@ function makeGuess() {
     const fb = document.getElementById("feedback");
     const lo = document.getElementById("lo");
     const hi = document.getElementById("hi");
-    console.log({
-        guess,
-        secret,
-        equal: guess === secret
-    });
 
     if (guess === secret) {
         fb.textContent =
