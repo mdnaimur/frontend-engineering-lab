@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number gussing game</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="game">
+        <h2 class="headline2"> Number Gussing Game</h2>
+        <p id="range-hint">
+            Guess a number between <strong id="lo">1</strong> and
+            <strong id="hi">100</strong>
+        </p>
+        <div id="attempts-bar"></div>
+        <div class="input-box">
+            <input type="number" id="guess-input" min="1" placeholder="Your Number">
+            <button id="makeGuess">Guess</button>
+            <button id="reset" class="reset-btn">New game</button>
+        </div>
+
+        <div id="feedback"></div>
+        <div id="history"></div>
+
+        <div id="result-banner">
+            <span id="result-text"></span>
+            <button onclick="
+        sendPrompt(
+          'Explain how the number guessing game code works step by step',
+        )
+      " style="margin-left: 12px; font-size: 13px">
+                Explain the code ↗
+            </button>
+        </div>
+    </div>
+
+
+    <script src="./app.js"></script>
+</body>
+
+</html>

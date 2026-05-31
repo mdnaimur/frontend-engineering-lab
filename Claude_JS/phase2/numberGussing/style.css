@@ -1,0 +1,109 @@
+body {
+    background: #0d183d;
+    color: #fff;
+}
+
+#game {
+    padding: 1.5rem 0;
+    max-width: 480px;
+    margin: auto;
+
+}
+
+#feedback {
+    min-height: 28px;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 1rem 0 0.5rem;
+}
+
+#history {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.guess-pill {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-secondary);
+}
+
+.guess-pill.high {
+    background: #faece7;
+    color: #993c1d;
+    border-color: #f0997b;
+}
+
+.guess-pill.low {
+    background: #e6f1fb;
+    color: #185fa5;
+    border-color: #85b7eb;
+}
+
+.guess-pill.win {
+    background: #eaf3de;
+    color: #3b6d11;
+    border-color: #97c459;
+}
+
+#attempts-bar {
+    display: flex;
+    gap: 6px;
+    margin: 0.75rem 0;
+}
+
+.attempt-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-border-tertiary);
+    transition: background 0.3s;
+}
+
+.attempt-dot.used {
+    background: #7f77dd;
+}
+
+.attempt-dot.last {
+    background: #e24b4a;
+}
+
+#guess-input {
+    width: 100px;
+    margin-right: 8px;
+}
+
+
+#range-hint {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin: 0.5rem 0 1rem;
+}
+
+#result-banner {
+    display: none;
+    padding: 1rem 1.25rem;
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary);
+    margin-top: 1rem;
+    font-size: 14px;
+}
+
+.headline2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0 0 4px
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap
+}
