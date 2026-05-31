@@ -1,0 +1,230 @@
+  * {
+      box-sizing: border-box;
+  }
+
+  body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+  }
+
+  .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+  }
+
+  input,
+  select {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+  }
+
+  button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+  }
+
+  button:hover {
+      background: #f0f0f0;
+  }
+
+  .btn-primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+  }
+
+  .btn-primary:hover {
+      background: #1d4ed8;
+  }
+
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+  }
+
+
+  th {
+      background: #f8f9fa;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #dee2e6;
+  }
+
+  td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #dee2e6;
+  }
+
+
+  tr:hover td {
+      background: #f8f9fa;
+  }
+
+  .badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+  }
+
+  .grade-A {
+      background: #d1fae5;
+      color: #4bb99a;
+  }
+
+  .grade-A+ {
+      background: #28312c;
+      color: #251324;
+  }
+
+  .grade-A- {
+      background: #b6d6cf;
+      color: #060802;
+  }
+
+  .grade-B {
+      background: #dbeafe;
+      color: #1e40af;
+  }
+
+  .grade-C {
+      background: #fef9c3;
+      color: #854d0e;
+  }
+
+  .grade-F {
+      background: #fee2e2;
+      color: #991b1b;
+  }
+
+  .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+  }
+
+  .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+  }
+
+  .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+  }
+
+
+  #addForm {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: none;
+  }
+
+  #addForm.open {
+      display: block;
+  }
+
+  .form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+  }
+
+  .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+  }
+
+  label {
+      font-size: 12px;
+      color: #555;
+  }
+
+
+  h1 {
+      text-align: center;
+  }
+
+
+  .output,
+  .json-output {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+  }
+
+  pre {
+      background: #111827;
+      color: #22c55e;
+      padding: 15px;
+      overflow-x: auto;
+  }
+
+  /* for product css */
+
+
+
+  .container {
+      width: 80%;
+      margin: 40px auto;
+  }
+
+  h1 {
+      text-align: center;
+  }
+
+  .stats-product {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      text-align: center;
+  }
+
+  #revenue {
+      font-size: 28px;
+      color: green;
+      font-weight: bold;
+  }
+
+  tr:hover {
+      background: #f1f2f6;
+  }
+
+  .completed {
+      color: green;
+  }
+
+  .pending {
+      color: orange;
+  }
+
+  .cancelled {
+      color: red;
+  }
