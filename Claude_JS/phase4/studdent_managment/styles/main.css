@@ -8,7 +8,8 @@
       margin: 2rem auto;
       padding: 0 1rem;
       color: #fff;
-      background: #240f5e;
+      background: #160347;
+
   }
 
   .controls {
@@ -21,7 +22,7 @@
   input,
   select {
       padding: 8px 12px;
-      font-size: 14px;
+      font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
   }
@@ -54,7 +55,7 @@
   table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 16px;
+      font-size: 20px;
   }
 
 
@@ -266,4 +267,56 @@
 
   .cancelled {
       color: red;
+  }
+
+
+  /* ================= 📱 RESPONSIVE BREAKPOINT ================= */
+  @media (max-width: 768px) {
+
+      body {
+          margin: 1rem;
+          padding: 0 0.5rem;
+      }
+
+      .stats {
+          grid-template-columns: repeat(2, 1fr);
+      }
+
+      .controls {
+          flex-direction: column;
+      }
+
+      input,
+      select,
+      button {
+          width: 100%;
+      }
+
+      table {
+          font-size: 14px;
+      }
+
+      .stat-value {
+          font-size: 1.2rem;
+      }
+
+      .container {
+          width: 100%;
+      }
+  }
+
+  @media (max-width: 480px) {
+
+      .stats {
+          grid-template-columns: 1fr;
+      }
+
+      table {
+          font-size: 13px;
+      }
+
+      th,
+      td {
+          padding: 8px;
+      }
   }

@@ -4,7 +4,6 @@ import { ComputeStats } from '../utils/ComputeStats.js';
 export function renderStats() {
 
     const StudentAnalysis = ComputeStats();
-    console.table(StudentAnalysis)
 
 
     if (!stats) return;

@@ -1,25 +1,37 @@
 import { getFilterStudents } from '../utils/getFilterStudents.js';
 import { getGrade } from '../utils/getGrade.js';
 
+import { renderPagination } from '../features/renderPagination.js';
+import { getCurrentPage, setCurrentPage } from '../state/state.js';
+import { removeStudent } from '../utils/RemoveStudent.js';
+
+const rowsPerPage = 5;
+
 
 export function renderTable() {
     const tbody = document.getElementById("tableBody");
 
     // const filtered_data = students;
     const filtered_data = getFilterStudents();
-    // console.time('students');
-    // console.table(filtered_data);
-    // console.timeEnd('students');
+    const totalPages = Math.ceil(filtered_data.length / rowsPerPage);
 
+    const currentPage = getCurrentPage();
 
+    if (currentPage > totalPages) {
+        setCurrentPage(totalPages || 1);
+    }
 
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
 
-    tbody.innerHTML = filtered_data.map((s, index) => {
+    const paginatedData = filtered_data.slice(start, end);
+
+    tbody.innerHTML = paginatedData.map((s, index) => {
         const grade = getGrade(s.score);
 
         return `
           <tr>
-            <td>${index + 1}</td>
+            <td>${start + index + 1}</td>
             <td>${s.name}</td>
             <td>${s.subject}</td>
             <td>${s.score}</td>
@@ -31,4 +43,22 @@ export function renderTable() {
 
     }).join("");
 
+
+    renderPagination(filtered_data.length);
+
+
+    /// remove student 
+
+    document.addEventListener("click", (e) => {
+
+        if (e.target.classList.contains("remove-btn")) {
+            const id = e.target.dataset.id;
+            console.log(" I am reomve btn id", id);
+
+            removeStudent(id);
+        }
+    })
 }
+
+
+
