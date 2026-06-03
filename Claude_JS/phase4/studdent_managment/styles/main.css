@@ -1,0 +1,322 @@
+  * {
+      box-sizing: border-box;
+  }
+
+  body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #fff;
+      background: #160347;
+
+  }
+
+  .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+  }
+
+  input,
+  select {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+  }
+
+  button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+  }
+
+  button:hover {
+      background: #f0f0f0;
+      color: rgb(8, 8, 53);
+  }
+
+  .btn-primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+  }
+
+  .btn-primary:hover {
+      background: #1d4ed8;
+  }
+
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 20px;
+  }
+
+
+  th {
+      background: #f8f9fa;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #dee2e6;
+      color: #000;
+  }
+
+
+  td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #dee2e6;
+  }
+
+  tr td {
+      transition: background-color 0.3s ease,
+          color 0.3s ease;
+
+  }
+
+  tr:hover {
+      transform: translateY(-2px);
+  }
+
+  tr:hover td {
+      background: #f8f9fa;
+      color: #000;
+      cursor: pointer;
+
+  }
+
+  .badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+  }
+
+  .grade-A {
+      background: #d1fae5;
+      color: #4bb99a;
+  }
+
+  .grade-A+ {
+      background: #28312c;
+      color: #251324;
+  }
+
+  .grade-A- {
+      background: #b6d6cf;
+      color: #060802;
+  }
+
+  .grade-B {
+      background: #dbeafe;
+      color: #1e40af;
+  }
+
+  .grade-C {
+      background: #fef9c3;
+      color: #854d0e;
+  }
+
+  .grade-F {
+      background: #fee2e2;
+      color: #991b1b;
+  }
+
+  .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
+  }
+
+
+  .stat-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      color: #000;
+      cursor: pointer;
+
+      transition: all 0.35s ease;
+  }
+
+  .stat-card:hover {
+      transform: translateY(-5px);
+      background: #0c4796c4;
+      color: #fff;
+      box-shadow:
+          0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+
+
+
+
+  /* 
+  text end */
+
+
+  .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #000;
+  }
+
+  .stat-label {
+      font-size: 16px;
+      color: #666;
+      margin-top: 2px;
+  }
+
+
+  #addForm {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: none;
+  }
+
+  #addForm.open {
+      display: block;
+  }
+
+  .form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+  }
+
+  .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+  }
+
+  label {
+      font-size: 12px;
+      color: #555;
+  }
+
+
+  h1 {
+      text-align: center;
+  }
+
+
+  .output,
+  .json-output {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+  }
+
+  pre {
+      background: #111827;
+      color: #22c55e;
+      padding: 15px;
+      overflow-x: auto;
+  }
+
+  /* for product css */
+
+
+
+  .container {
+      width: 80%;
+      margin: 40px auto;
+  }
+
+  h1 {
+      text-align: center;
+  }
+
+  .stats-product {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      text-align: center;
+  }
+
+  #revenue {
+      font-size: 28px;
+      color: green;
+      font-weight: bold;
+  }
+
+  tr:hover {
+      background: #f1f2f6;
+  }
+
+  .completed {
+      color: green;
+  }
+
+  .pending {
+      color: orange;
+  }
+
+  .cancelled {
+      color: red;
+  }
+
+
+  /* ================= 📱 RESPONSIVE BREAKPOINT ================= */
+  @media (max-width: 768px) {
+
+      body {
+          margin: 1rem;
+          padding: 0 0.5rem;
+      }
+
+      .stats {
+          grid-template-columns: repeat(2, 1fr);
+      }
+
+      .controls {
+          flex-direction: column;
+      }
+
+      input,
+      select,
+      button {
+          width: 100%;
+      }
+
+      table {
+          font-size: 14px;
+      }
+
+      .stat-value {
+          font-size: 1.2rem;
+      }
+
+      .container {
+          width: 100%;
+      }
+  }
+
+  @media (max-width: 480px) {
+
+      .stats {
+          grid-template-columns: 1fr;
+      }
+
+      table {
+          font-size: 13px;
+      }
+
+      th,
+      td {
+          padding: 8px;
+      }
+  }
