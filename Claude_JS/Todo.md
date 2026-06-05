@@ -14,8 +14,11 @@
 2. do your self todo app build and time limied 1hr20min
 3. phase 6 play with every single promise, fetch then all make example and play -->
 
-1. student manage   
+<!-- 1. student manage   
     * add student function
     * pagination
-    * overall
-2. 
+    * overall -->
+2. dom paly more sheet and (https://www.javascripttutorial.net/javascript-dom/)
+3. todo 
+4. 100days dom  project (random color(p-15)) + some exmaple code observation; 
+5. ayncs
