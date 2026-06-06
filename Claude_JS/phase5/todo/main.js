@@ -6,8 +6,8 @@ import { initTaskEvents } from './UI/taskEvents.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initTodoEvent();
-    initTaskEvents()
-    renderStats()
+    initTaskEvents();
+    renderStats();
     render();
 });
 
