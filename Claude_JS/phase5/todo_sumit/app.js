@@ -29,6 +29,12 @@ let createTask = function (task) {
 
 function addTask(e) {
     e.preventDefault();
+
+    if (newTask.value.trim() === "") {
+        console.log("data is empty");
+        return;
+    }
+
     let listItem = createTask(newTask.value);
     todoUl.appendChild(listItem);
 
