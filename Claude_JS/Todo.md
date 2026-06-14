@@ -30,7 +30,7 @@
 
 
 ## project
-1. git live
+<!-- 1. git live -->
 2. phase 8 note++
 3. phase 9 performance monitor
 
@@ -44,3 +44,9 @@ Project 3 — Markdown Note Editor
   Targets: Real-time rendering, keyboard shortcuts, file download,
            localStorage, split-pane UI
 
+
+
+projects: 1.  Note++: phase 8
+ first understand each and every sentence then do self
+ and offcourse revision 
+ 

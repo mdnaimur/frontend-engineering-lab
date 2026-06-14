@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Notes</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="offline-banner" id="offlineBanner">You are offline — notes save locally</div>
+
+    <div class="topbar">
+        <h1>Smart Notes</h1>
+        <span id="noteCount" style="font-size:13px;color:#888"></span>
+        <button class="btn btn-primary" onclick="openModal()">+ New Note</button>
+    </div>
+
+    <div class="app">
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search notes..." oninput="render()" />
+            <select class="btn" id="tagFilter" onchange="render()">
+                <option value="">All tags</option>
+            </select>
+            <select class="btn" id="sortBy" onchange="render()">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="alpha">A → Z</option>
+            </select>
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+    </div>
+
+    <!-- New/Edit Modal -->
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal">
+            <h2 id="modalTitle">New Note</h2>
+            <input type="text" id="inputTitle" placeholder="Title" maxlength="80" />
+            <textarea id="inputBody" placeholder="Write your note..."></textarea>
+            <input type="text" id="inputTag" placeholder="Tag (e.g. work, personal, idea)" maxlength="30" />
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveNote()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-bar" id="statusBar"></div>
+
+
+    <script src="./main.js"></script>
+</body>
+
+</html>
