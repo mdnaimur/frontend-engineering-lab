@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Performance Monitor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            padding: 1.5rem;
+            min-height: 100vh
+        }
+
+        h1 {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 16px
+        }
+
+        .card-title {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px
+        }
+
+        .metric {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1
+        }
+
+        .metric-unit {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px
+        }
+
+        .bar-container {
+            height: 6px;
+            background: #1e1e1e;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s
+        }
+
+        .bar-green {
+            background: #22c55e
+        }
+
+        .bar-yellow {
+            background: #eab308
+        }
+
+        .bar-red {
+            background: #ef4444
+        }
+
+        .log {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 16px;
+            height: 240px;
+            overflow-y: auto
+        }
+
+        .log-title {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px
+        }
+
+        .log-entry {
+            font-size: 12px;
+            padding: 4px 0;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            gap: 10px
+        }
+
+        .log-time {
+            color: #555;
+            flex-shrink: 0
+        }
+
+        .log-msg {
+            color: #ccc
+        }
+
+        .log-warn {
+            color: #eab308
+        }
+
+        .log-error {
+            color: #ef4444
+        }
+
+        .log-ok {
+            color: #22c55e
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap
+        }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #111;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: monospace
+        }
+
+        .btn:hover {
+            background: #1e1e1e;
+            color: #fff
+        }
+
+        .btn-danger {
+            border-color: #ef4444;
+            color: #ef4444
+        }
+
+        .btn-danger:hover {
+            background: #1a0000
+        }
+
+        #searchDemo input {
+            width: 100%;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            outline: none;
+            margin-top: 6px
+        }
+
+        #searchDemo input:focus {
+            border-color: #555
+        }
+
+        #searchResult {
+            font-size: 12px;
+            color: #555;
+            margin-top: 6px;
+            min-height: 16px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>⚡ Performance Monitor</h1>
+
+    <div class="controls">
+        <button class="btn" onclick="runHeavyTask()">Run Heavy Task</button>
+        <button class="btn" onclick="runChunkedTask()">Run Chunked Task</button>
+        <button class="btn" onclick="testMemory()">Allocate Memory</button>
+        <button class="btn" onclick="clearMemory()">Free Memory</button>
+        <button class="btn btn-danger" onclick="triggerError()">Trigger Error</button>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-title">Memory Usage</div>
+            <div class="metric" id="memMetric">—</div>
+            <div class="metric-unit">MB used / available</div>
+            <div class="bar-container">
+                <div class="bar bar-green" id="memBar" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Task Duration</div>
+            <div class="metric" id="taskMetric">—</div>
+            <div class="metric-unit">ms last operation</div>
+            <div class="bar-container">
+                <div class="bar bar-green" id="taskBar" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Event Count</div>
+            <div class="metric" id="eventMetric">0</div>
+            <div class="metric-unit">total events fired</div>
+            <div class="bar-container">
+                <div class="bar bar-green" id="eventBar" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Errors Caught</div>
+            <div class="metric" id="errorMetric">0</div>
+            <div class="metric-unit">runtime errors</div>
+            <div class="bar-container">
+                <div class="bar bar-red" id="errorBar" style="width:0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debounce demo -->
+    <div class="card" style="margin-bottom:16px" id="searchDemo">
+        <div class="card-title">Debounce Demo — type fast, fetch fires slow</div>
+        <input type="text" id="debounceInput" placeholder="Start typing to see debounce in action..." />
+        <div id="searchResult">Waiting for input...</div>
+    </div>
+
+    <div class="log" id="logPanel">
+        <div class="log-title">Event Log</div>
+    </div>
+
+    <script>
+        // ── STATE ─────────────────────────────────────────────
+        let eventCount = 0;
+        let errorCount = 0;
+        let memoryChunks = [];
+        const MAX_LOG = 60;
+
+        // ── LOGGING ───────────────────────────────────────────
+        function log(message, type = 'default') {
+            const panel = document.getElementById('logPanel');
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            const entry = document.createElement('div');
+            entry.className = `log-entry`;
+            entry.innerHTML = `
+      <span class="log-time">${time}</span>
+      <span class="log-${type}">${message}</span>
+    `;
+            panel.appendChild(entry);
+            panel.scrollTop = panel.scrollHeight;
+
+            // Keep log capped
+            const entries = panel.querySelectorAll('.log-entry');
+            if (entries.length > MAX_LOG) entries[0].remove();
+        }
+
+        // ── METRICS ───────────────────────────────────────────
+        function updateMemoryMetric() {
+            if (!performance.memory) {
+                document.getElementById('memMetric').textContent = 'N/A';
+                return;
+            }
+            const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
+            const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(1);
+            const pct = (used / total * 100).toFixed(0);
+
+            document.getElementById('memMetric').textContent = `${used} / ${total}`;
+            const bar = document.getElementById('memBar');
+            bar.style.width = `${pct}%`;
+            bar.className = `bar ${pct > 80 ? 'bar-red' : pct > 60 ? 'bar-yellow' : 'bar-green'}`;
+        }
+
+        function updateTaskMetric(ms) {
+            document.getElementById('taskMetric').textContent = ms.toFixed(1);
+            const pct = Math.min(ms / 2000 * 100, 100);
+            const bar = document.getElementById('taskBar');
+            bar.style.width = `${pct}%`;
+            bar.className = `bar ${pct > 75 ? 'bar-red' : pct > 40 ? 'bar-yellow' : 'bar-green'}`;
+        }
+
+        function updateEventMetric() {
+            eventCount++;
+            document.getElementById('eventMetric').textContent = eventCount;
+            const pct = Math.min(eventCount / 200 * 100, 100);
+            document.getElementById('eventBar').style.width = `${pct}%`;
+        }
+
+        function updateErrorMetric() {
+            errorCount++;
+            document.getElementById('errorMetric').textContent = errorCount;
+            document.getElementById('errorBar').style.width =
+                `${Math.min(errorCount * 10, 100)}%`;
+        }
+
+        // ── TASKS ─────────────────────────────────────────────
+        function runHeavyTask() {
+            log("Starting BLOCKING heavy task...", "warn");
+            const start = performance.now();
+
+            // Synchronous — blocks the UI thread
+            let result = 0;
+            for (let i = 0; i < 50_000_000; i++) result += Math.sqrt(i);
+
+            const duration = performance.now() - start;
+            updateTaskMetric(duration);
+            log(`Heavy task done in ${duration.toFixed(1)}ms — UI was frozen`, "error");
+            updateEventMetric();
+        }
+
+        function runChunkedTask() {
+            log("Starting NON-BLOCKING chunked task...", "ok");
+            const start = performance.now();
+            const total = 50_000_000;
+            const CHUNK = 2_000_000;
+            let result = 0;
+            let progress = 0;
+
+            function processChunk() {
+                const end = Math.min(progress + CHUNK, total);
+                for (let i = progress; i < end; i++) result += Math.sqrt(i);
+                progress = end;
+
+                if (progress < total) {
+                    setTimeout(processChunk, 0); // yield to event loop between chunks
+                } else {
+                    const duration = performance.now() - start;
+                    updateTaskMetric(duration);
+                    log(`Chunked task done in ${duration.toFixed(1)}ms — UI stayed responsive`, "ok");
+                    updateEventMetric();
+                }
+            }
+
+            processChunk();
+        }
+
+        // ── MEMORY ────────────────────────────────────────────
+        function testMemory() {
+            const chunk = new Array(500_000).fill("memory-test-data");
+            memoryChunks.push(chunk);
+            log(`Allocated ~${(500_000 * 2 / 1024).toFixed(0)}KB. Total chunks: ${memoryChunks.length}`, "warn");
+            updateMemoryMetric();
+            updateEventMetric();
+        }
+
+        function clearMemory() {
+            const count = memoryChunks.length;
+            memoryChunks = []; // release all references — GC can now collect
+            log(`Released ${count} chunk(s) — memory should drop`, "ok");
+            setTimeout(updateMemoryMetric, 100);
+            updateEventMetric();
+        }
+
+        // ── ERROR HANDLING ────────────────────────────────────
+        function triggerError() {
+            try {
+                null.property; // intentional TypeError
+            } catch (e) {
+                updateErrorMetric();
+                log(`Caught: [${e.name}] ${e.message}`, "error");
+            }
+            updateEventMetric();
+        }
+
+        // Global unhandled error catcher
+        window.addEventListener('unhandledrejection', (e) => {
+            updateErrorMetric();
+            log(`Unhandled rejection: ${e.reason}`, "error");
+        });
+
+        // ── DEBOUNCE DEMO ─────────────────────────────────────
+        function debounce(fn, delay) {
+            let id;
+            return (...args) => {
+                clearTimeout(id);
+                id = setTimeout(() => fn(...args), delay);
+            };
+        }
+
+        let rawCount = 0;
+        let debounceCount = 0;
+
+        const debouncedSearch = debounce((query) => {
+            debounceCount++;
+            document.getElementById('searchResult').textContent =
+                `✓ Fetch fired (${debounceCount}x) for: "${query}" | Raw keystrokes: ${rawCount}`;
+            log(`Debounced fetch: "${query}" — saved ${rawCount - debounceCount} extra calls`, "ok");
+            updateEventMetric();
+        }, 500);
+
+        document.getElementById('debounceInput').addEventListener('input', (e) => {
+            rawCount++;
+            document.getElementById('searchResult').textContent =
+                `Typing... (${rawCount} keystrokes, ${debounceCount} fetches)`;
+            debouncedSearch(e.target.value);
+        });
+
+        // ── MEMORY POLLING ────────────────────────────────────
+        setInterval(updateMemoryMetric, 2000);
+
+        // ── INIT ─────────────────────────────────────────────
+        updateMemoryMetric();
+        log("Performance monitor ready. Run a task to begin.", "ok");
+    </script>
+</body>
+
+</html>

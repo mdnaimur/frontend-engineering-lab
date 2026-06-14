@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github Profile Viewer</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="app">
+        <h1>GitHub Profile Viewer</h1>
+
+        <div class="search-row">
+            <input type="text" id="usernameInput" placeholder="Enter GitHub username..." />
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div id="loading">
+            <div class="card visible">
+                <div class="profile-header">
+                    <div class="skeleton sk-avatar"></div>
+                    <div style="flex:1">
+                        <div class="skeleton sk-line" style="width:60%"></div>
+                        <div class="skeleton sk-line" style="width:40%"></div>
+                        <div class="skeleton sk-line" style="width:80%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="error"></div>
+
+        <!-- Profile card -->
+        <div class="card" id="profileCard">
+            <div class="profile-header">
+                <img class="avatar" id="avatar" src="" alt="avatar" />
+                <div class="profile-info">
+                    <h2 id="fullName"></h2>
+                    <div class="login" id="loginName"></div>
+                    <div class="bio" id="bio"></div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="reposCount">0</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="followersCount">0</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="followingCount">0</div>
+                    <div class="stat-label">Following</div>
+                </div>
+            </div>
+
+            <div class="meta">
+                <span id="location"></span>
+                <span id="company"></span>
+                <span id="blog"></span>
+                <span id="joined"></span>
+            </div>
+
+            <div class="repos-title">Top Repositories</div>
+            <div class="repo-list" id="repoList"></div>
+        </div>
+    </div>
+
+
+    <script src="./main.js"></script>
+</body>
+
+</html>

@@ -8,8 +8,7 @@ import { userService } from "../api/userService.js";
 
 export async function loadDashboard(userId) {
     showLoadingSpinner();
-    console.time("dashboard");
-    console.log("== dashboard ==")
+
 
     try {
         // Step 1: user is critical — fail fast if unavailable
@@ -35,7 +34,6 @@ export async function loadDashboard(userId) {
             console.warn("User posts unavailable:", postsResult.reason.message);
         }
 
-        console.timeEnd("dashboard");
 
         // Step 5: render
         renderDashboard({ user, posts, allPosts });

@@ -95,6 +95,7 @@
 
 
 // 1. Private state — data that can't be touched from outside
+
 function createBankAccount(initialBalance) {
     let balance = initialBalance; // private — no direct access
 
