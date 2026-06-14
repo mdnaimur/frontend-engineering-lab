@@ -21,8 +21,8 @@
 
 
 <!-- 1. phase 6, 7, 8 ,9  -->
-2. dom paly more sheet and (https://www.javascripttutorial.net/javascript-dom/)
-3. todo 
+<!-- 2. dom paly more sheet and (https://www.javascripttutorial.net/javascript-dom/)
+3. todo  -->
 4. 100days dom  project (random color(p-15)) + some exmaple code observation; 
 5. ayncs
 6/ phase 6 excution model proejct practise 2x time ; 
